@@ -4,21 +4,15 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "libft.h"
+//#include "libft.h"
 #define LEN 512
 
 /*
 **	FUNCTIONS PROTOTYPES
 */
-void 	ft_memset(void *b, int c, size_t len);
+
 void 	ft_bzero(void *s, size_t n);
-size_t 	ft_strlen(const char *s);
 char	*ft_strcat(char *restrict s1, const char *restrict s2);
-void	*ft_memcpy(void *restrict dst, const void *restrict src, size_t n);
-void	*ft_memrcpy(void *restrict dst, const void *restrict src, size_t n);
-void	*ft_memmove(void *restrict dst, const void *restrict src, size_t n);
-int 	ft_memcmp(const void *s1, const void *s2, size_t n);
-char 	*ft_strdup(const char *s1);
 int		ft_puts(const char *s);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -27,7 +21,23 @@ int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
+/*
+**		partie 2
+*/
+void	*ft_memcpy(void *restrict dst, const void *restrict src, size_t n);
+void 	ft_memset(void *b, int c, size_t len);
+size_t 	ft_strlen(const char *s);
+char 	*ft_strdup(const char *s1);
+/*
+**		partie 3
+*/
 void	ft_cat(int fd);
+/*
+**		bonus
+*/
+void	*ft_memrcpy(void *restrict dst, const void *restrict src, size_t n);
+void	*ft_memmove(void *restrict dst, const void *restrict src, size_t n);
+int 	ft_memcmp(const void *s1, const void *s2, size_t n);
 
 /*
 **	TESTS FUNCTIONS PROTOTYPES
@@ -46,13 +56,15 @@ int		all_test_memrcpy();
 int		all_test_memmove();
 int		all_test_memset();
 int 	all_test_strlen();
+int		all_test_memcmp();
+
 
 int main(void)
 {
 	int fd;
 	unsigned int nb_error;
 	nb_error = 0;
-	/*nb_error += all_test_bzero();
+	nb_error += all_test_bzero();
 	nb_error += all_test_strcat();
 	nb_error += all_test_isalpha();
 	nb_error += all_test_isdigit();
@@ -62,18 +74,18 @@ int main(void)
 	nb_error += all_test_toupper();
 	nb_error += all_test_tolower();
 	nb_error += all_test_strlen();
-	nb_error += all_test_memset();*/
-	//
-	//nb_error += all_test_memrcpy();
-	//nb_error += all_test_memcpy();
+	nb_error += all_test_memset();
+	nb_error += all_test_memrcpy();
+	nb_error += all_test_memcpy();
 	//nb_error += all_test_memmove();
-	//nb_error += all_test_strlen();
-	char buffer1[] = "HEllo1";
-	char buffer2[] = "Hello1";
-	printf("ret ft_memcmp:0x%02x %d\n",ft_memcmp(buffer1, buffer2, strlen(buffer1))
-									,ft_memcmp(buffer1, buffer2, strlen(buffer1)));
-	printf("ret memcmp:0x%02x %d\n",memcmp(buffer1, buffer2, strlen(buffer1))
-									,memcmp(buffer1, buffer2, strlen(buffer1)));
+	nb_error += all_test_strlen();
+	nb_error += all_test_memcmp();
+	//char buffer1[] = "\200";
+	//char buffer2[] = "\0";
+	//printf("ret ft_memcmp:0x%02x %d\n",ft_memcmp(buffer1, buffer2, strlen(buffer1))
+	//								,ft_memcmp(buffer1, buffer2, strlen(buffer1)));
+	//printf("ret memcmp:0x%02x %d\n",memcmp(buffer1, buffer2, strlen(buffer1))
+	//								,memcmp(buffer1, buffer2, strlen(buffer1)));
 	//ft_cat(0);
 	printf("errror detected:%d\n", nb_error);
 	
@@ -429,7 +441,7 @@ int			all_test_memset()
 	static struct s_memset data_memset[] = {
 	 {'A', 20}, 
 	 {'B', 50}, 
-	 {1, 10}, 
+	 {1, 10},
 	};
 	int i;
 
@@ -448,16 +460,22 @@ static int	test_memcpy(char *buff1, char *buff2, char *val, int len)
 	memcpy(buff1, val, len);
 	ft_memcpy(buff2, val, len);
 	if (!memcmp(buff1, buff2, len))
+	{
 		printf("\e[0;32mOK\e[0;0m\n");
+		return (0);
+	}
 	else
+	{
 		printf("\e[0;31mKO\e[0;0m\n");
-	return (0);
+		return (1);
+	}
 }
 int			all_test_memcpy()
 {
 	printf("\e[0;33mLAUNCH TEST MEMCPY\e[0;0m\n");
 	char buff1[256];
 	char buff2[256];
+	int error = 0;
 
 	static char *val_memcpy[] = {
 		"Toto",
@@ -468,10 +486,10 @@ int			all_test_memcpy()
 	int i;
 	while (val_memcpy[i])
 	{
-		test_memcpy(buff1, buff2, val_memcpy[i], strlen(val_memcpy[i]));
+		error += test_memcpy(buff1, buff2, val_memcpy[i], strlen(val_memcpy[i]));
 		++i;
 	}
-	return (0);
+	return (error);
 }
 
 /*
@@ -483,16 +501,22 @@ static int	test_memrcpy(char *buff1, char *buff2, char *val, int len)
 	memcpy(buff1, val, len);
 	ft_memrcpy(buff2, val, len);
 	if (!memcmp(buff1, buff2, len))
+	{
 		printf("\e[0;32mOK\e[0;0m\n");
+		return (0);
+	}
 	else
+	{
 		printf("\e[0;31mKO\e[0;0m\n");
-	return (0);
+		return (1);
+	}
 }
 int			all_test_memrcpy()
 {
 	printf("\e[0;33mLAUNCH TEST MEMRCPY\e[0;0m\n");
 	char buff1[256];
 	char buff2[256];
+	int error = 0;
 
 	char *val_memrcpy[] = {
 		"Toto",
@@ -503,10 +527,10 @@ int			all_test_memrcpy()
 	int i;
 	while (val_memrcpy[i])
 	{
-		test_memrcpy(buff1, buff2, val_memrcpy[i], strlen(val_memrcpy[i]));
+		error += test_memrcpy(buff1, buff2, val_memrcpy[i], strlen(val_memrcpy[i]));
 		++i;
 	}
-	return (0);
+	return (error);
 }
 
 /*
@@ -518,16 +542,22 @@ static int	test_memmove(char *buff1, char *buff2, char *val, int len)
 	memmove(buff1, val, len);
 	ft_memmove(buff2, val, len);
 	if (!memcmp(buff1, buff2, len))
+	{
 		printf("\e[0;32mOK\e[0;0m\n");
+		return (0);
+	}
 	else
+	{
 		printf("\e[0;31mKO\e[0;0m\n");
-	return (0);
+		return (1);
+	}
 }
 int			all_test_memmove()
 {
 	printf("\e[0;33mLAUNCH TEST MEMMOVE\e[0;0m\n");
 	char buff1[256];
 	char buff2[256];
+	int error = 0;
 
 	char *val_memmove[] = {
 		"Toto",
@@ -538,9 +568,65 @@ int			all_test_memmove()
 	int i;
 	while (val_memmove[i])
 	{
-		test_memmove(buff1, buff2, val_memmove[i], strlen(val_memmove[i]));
+		error += test_memmove(buff1, buff2, val_memmove[i], strlen(val_memmove[i]));
 		++i;
 	}
-	return (0);
+	return (error);
 }
 
+/*
+** MEMMOVE TESTS
+*/
+static int	test_memcmp(char *buff1, char *buff2, char *val1, char *val2, int len)
+{
+	printf("start\n");
+	int ret1;
+	int ret2;
+
+	printf("val=%s\tlen=%d\t", val1, len);
+	if (val2)
+		printf("\nval2=%s\tlen=%lu\t", val2, strlen(val2));
+
+	strcpy(buff1, val1);
+	if (val2)
+		strcpy(buff2, val2);
+	else
+		strcpy(buff2, val1);
+	
+	ret1 = memcmp(buff1, buff2, len);
+	ret2 = ft_memcmp(buff2, buff2, len);
+	if (ret1 == ret2)
+	{
+		printf("\e[0;32mOK\e[0;0m\n");
+		return (0);
+	}
+	else
+	{
+		printf("\e[0;31mKO\e[0;0m real:%d your:%d\n", ret1, ret2);
+		return (1);
+	}
+}
+int			all_test_memcmp()
+{
+	printf("\e[0;33mLAUNCH TEST MEMCMP\e[0;0m\n");
+	char buff1[256];
+	char buff2[256];
+	int error = 0;
+
+	char *val_memcmp[] = {
+		"Ecole 42\0"
+		"\200",
+		"\0",
+		"",
+		0
+	};
+	int i = 0;
+	while (val_memcmp[i])
+	{
+		error += test_memcmp(buff1, buff2, val_memcmp[i], 0, strlen(val_memcmp[i]));
+		++i;
+	}
+
+	error += test_memcmp(buff1, buff2, "Toto", "Tat", 4);
+	return (error);
+}
