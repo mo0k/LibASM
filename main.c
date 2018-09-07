@@ -579,13 +579,17 @@ int			all_test_memmove()
 */
 static int	test_memcmp(char *buff1, char *buff2, char *val1, char *val2, int len)
 {
-	printf("start\n");
 	int ret1;
 	int ret2;
+	int len2;
 
+	len2 = 0;
 	printf("val=%s\tlen=%d\t", val1, len);
 	if (val2)
-		printf("\nval2=%s\tlen=%lu\t", val2, strlen(val2));
+	{
+		len2 = strlen(val2);
+		printf("\nval2=%s\tlen=%d\t", val2, len2);
+	}
 
 	strcpy(buff1, val1);
 	if (val2)
@@ -593,8 +597,8 @@ static int	test_memcmp(char *buff1, char *buff2, char *val1, char *val2, int len
 	else
 		strcpy(buff2, val1);
 	
-	ret1 = memcmp(buff1, buff2, len);
-	ret2 = ft_memcmp(buff2, buff2, len);
+	ret1 = memcmp(buff1, buff2, len < len2 ? len : len2);
+	ret2 = ft_memcmp(buff1, buff2, len < len2 ? len : len2);
 	if (ret1 == ret2)
 	{
 		printf("\e[0;32mOK\e[0;0m\n");
@@ -628,5 +632,7 @@ int			all_test_memcmp()
 	}
 
 	error += test_memcmp(buff1, buff2, "Toto", "Tat", 4);
+	error += test_memcmp(buff1, buff2, "\200", "\0", 4);
+	error += test_memcmp(buff1, buff2, "\0", "\200", 4);
 	return (error);
 }
