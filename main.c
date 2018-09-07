@@ -630,9 +630,9 @@ int			all_test_memcmp()
 		error += test_memcmp(buff1, buff2, val_memcmp[i], 0, strlen(val_memcmp[i]));
 		++i;
 	}
-
 	error += test_memcmp(buff1, buff2, "Toto", "Tat", 4);
 	error += test_memcmp(buff1, buff2, "\200", "\0", 4);
 	error += test_memcmp(buff1, buff2, "\0", "\200", 4);
+	error += test_memcmp(buff1, buff2, "yoyo", "", 4);
 	return (error);
 }
