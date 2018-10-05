@@ -61,7 +61,7 @@ int		all_test_memcmp();
 
 int main(void)
 {
-	int fd;
+	//int fd;
 	unsigned int nb_error;
 	nb_error = 0;
 	nb_error += all_test_bzero();
@@ -77,16 +77,10 @@ int main(void)
 	nb_error += all_test_memset();
 	nb_error += all_test_memrcpy();
 	nb_error += all_test_memcpy();
-	//nb_error += all_test_memmove();
+	nb_error += all_test_memmove();
 	nb_error += all_test_strlen();
 	nb_error += all_test_memcmp();
-	//char buffer1[] = "\200";
-	//char buffer2[] = "\0";
-	//printf("ret ft_memcmp:0x%02x %d\n",ft_memcmp(buffer1, buffer2, strlen(buffer1))
-	//								,ft_memcmp(buffer1, buffer2, strlen(buffer1)));
-	//printf("ret memcmp:0x%02x %d\n",memcmp(buffer1, buffer2, strlen(buffer1))
-	//								,memcmp(buffer1, buffer2, strlen(buffer1)));
-	//ft_cat(0);
+
 	printf("errror detected:%d\n", nb_error);
 	
   return 0;
@@ -105,7 +99,7 @@ static int	test_bzero(char *buff1, char *buff2, size_t len)
 	else
 	{
 		printf("\e[0;31mKO\e[0;0m\n");
-		int i;
+		size_t i;
 		for (i = 0; i < len; ++i)
 			printf("buf[i]:0x%02x\n", buff2[i]);
 		return (1);
@@ -157,9 +151,9 @@ int			all_test_strcat()
 		{"Toto", ""},
 		{"", "Toto"},
 		{"", ""},
-		0
+		{0}
 	};
-	int i;
+	int i = 0;
 	while (value[i][0])
 	{
 		test_strcat(buff1, buff2, value[i][0], value[i][1]);
@@ -207,8 +201,7 @@ int 		all_test_isalpha()
 						, 0x78, 0x79, 0x7a, 0x7b
 						, 0x7c, 0x7d, 0x7e, 0x7f
 						, 0xff};
-	int		ret1;
-	int		ret2;
+
 	int 	i;
 	unsigned int error;
 
@@ -233,8 +226,6 @@ int 		all_test_isalpha()
 int 		all_test_isdigit()
 {
 	printf("\e[0;33mLAUNCH TEST ISDIGIT\e[0;0m\n");
-	int		ret1;
-	int		ret2;
 	int 	i;
 	unsigned int error;
 
@@ -259,8 +250,6 @@ int 		all_test_isdigit()
 int 		all_test_isalnum()
 {
 	printf("\e[0;33mLAUNCH TEST ISALNUM\e[0;0m\n");
-	int		ret1;
-	int		ret2;
 	int 	i;
 	unsigned int error;
 
@@ -285,8 +274,6 @@ int 		all_test_isalnum()
 int 		all_test_isascii()
 {
 	printf("\e[0;33mLAUNCH TEST ISASCII\e[0;0m\n");
-	int		ret1;
-	int		ret2;
 	int 	i;
 	unsigned int error;
 
@@ -311,8 +298,6 @@ int 		all_test_isascii()
 int 		all_test_isprint()
 {
 	printf("\e[0;33mLAUNCH TEST ISPRINT\e[0;0m\n");
-	int		ret1;
-	int		ret2;
 	int 	i;
 	unsigned int error;
 
@@ -424,7 +409,7 @@ static int	test_memset(char *buff1, char *buff2, int val, size_t len)
 	else
 	{
 		printf("\e[0;31mKO\e[0;0m\n");
-		int i;
+		size_t i;
 		for (i = 0; i < len; ++i)
 			printf("buf[i]:0x%02x\n", buff2[i]);
 		return (1);
@@ -483,7 +468,7 @@ int			all_test_memcpy()
 		"",
 		0
 	};
-	int i;
+	int i = 0;
 	while (val_memcpy[i])
 	{
 		error += test_memcpy(buff1, buff2, val_memcpy[i], strlen(val_memcpy[i]));
@@ -524,7 +509,7 @@ int			all_test_memrcpy()
 		"",
 		0
 	};
-	int i;
+	int i = 0;
 	while (val_memrcpy[i])
 	{
 		error += test_memrcpy(buff1, buff2, val_memrcpy[i], strlen(val_memrcpy[i]));
@@ -565,7 +550,7 @@ int			all_test_memmove()
 		"",
 		0
 	};
-	int i;
+	int i = 0;
 	while (val_memmove[i])
 	{
 		error += test_memmove(buff1, buff2, val_memmove[i], strlen(val_memmove[i]));
